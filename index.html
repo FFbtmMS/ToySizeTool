@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>Toy-Sizetool</h1>
+<h2>Umfang, Durchmesser</h2>
+
+<div class="slidecontainer">
+  <h3>Umfang in Zoll:</h3>
+  <input type="range" min="1" max="20" value="9.7" class="slider" step="0.1" id="myRange">
+  <p><span id="umfangZoll"></span> Zoll</p>
+</div>
+
+<div class="slidecontainer">
+  <h3>Umfang in cm:</h3>
+  <input type="range" min="1" max="51" value="24.6" class="slider" step="0.1" id="myRangeCm">
+  <p><span id="umfangCm"></span> Cm</p>
+</div>
+<div class="unitContainer">
+  <h3>Durchmesser:</h3>
+  <input type="range" min="1" max="17" value="7.8" class="slider" step="0.1" id="myRangeD">
+  <p><span id="durchmesserCm"></span> Cm Durchmesser</p>
+  <p><span id="durchmesserZ"></span> Zoll Durchmesser</p>
+</div>
+<div style="width:500px; height:500px; background-image:url(bulldozer.jpg);">
+<canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+
+
+
+<script>
+var slider = document.getElementById("myRange");
+var sliderCm = document.getElementById("myRangeCm");
+var sliderD = document.getElementById("myRangeD");
+var output = document.getElementById("umfangZoll");
+var dmZ = document.getElementById("durchmesserZ");
+var outputCm = document.getElementById("umfangCm");
+var dmC = document.getElementById("durchmesserCm");
+output.innerHTML = slider.value;
+outputCm.innerHTML = sliderCm.value;
+dmZ.innerHTML = sliderD.value/2.54;
+dmC.innerHTML = sliderD.value;
+
+slider.oninput = function() {
+  output.innerHTML = this.value;
+  outputCm.innerHTML = this.value*2.54;
+  dmZ.innerHTML = this.value/Math.PI;
+  dmC.innerHTML = (this.value*2.54)/Math.PI;
+  sliderCm.value = this.value*2.54;
+  sliderD.value = (this.value*2.54)/Math.PI;
+  drawCircle(((this.value*2.54)/Math.PI)*15.9);
+}
+sliderCm.oninput = function() {
+  outputCm.innerHTML = this.value;
+  output.innerHTML = this.value/2.54;
+  dmC.innerHTML = this.value/Math.PI;
+  dmZ.innerHTML = (this.value/2.54)/Math.PI;
+  slider.value = this.value/2.54;
+  sliderD.value = this.value/Math.PI;
+  drawCircle(((this.value)/Math.PI)*15.9);
+}
+sliderD.oninput = function() {
+  dmC.innerHTML = this.value;
+  dmZ.innerHTML = this.value/2.54;
+  output.innerHTML = (this.value/2.54)*Math.PI;
+  outputCm.innerHTML = this.value*Math.PI;
+  slider.value = (this.value/2.54)*Math.PI;
+  sliderCm.value = this.value*Math.PI;
+  drawCircle(this.value*15.9);
+}
+
+function drawCircle(d){
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.clearRect(0, 0, c.width, c.height)
+	ctx.beginPath();
+	ctx.lineWidth = 10;
+	ctx.arc(250, 250, d, 0, 2 * Math.PI);
+	ctx.stroke();
+}
+drawCircle(124);
+</script> 
+
+</body>
+</html>
